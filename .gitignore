@@ -1,0 +1,12 @@
+# secrets and local env
+.env
+*.pem
+*.key
+certs/
+
+# wazuh runtime data (lives in docker volumes, not the repo)
+wazuh-docker/
+
+# scratch / editor
+*.log
+.vscode/
