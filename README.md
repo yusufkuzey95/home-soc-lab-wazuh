@@ -43,7 +43,7 @@ One technique walked through end to end: what I simulated, what the raw logs loo
 
 ## What I learned
 
-Filling this in as I go. There's a running log of what broke and how I figured it out in [docs/lab-journal.md](docs/lab-journal.md).
+Filling this in as I go, the honest version including what broke and how I figured it out.
 
 ## How to reproduce
 
