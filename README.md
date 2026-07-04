@@ -1,52 +1,50 @@
 # Home SOC Lab (Wazuh)
 
-I'm building a small SOC environment at home to actually understand how a SIEM works, not just read about one. The setup: Wazuh running on Docker, one Linux endpoint shipping its logs in, and a handful of detections that I validate by attacking my own endpoint (safely) and watching the alerts fire.
+My third security project. I built a small SOC setup at home so I can say I've actually used a SIEM instead of just reading about one. The setup is Wazuh running in Docker, one Ubuntu endpoint sending its logs in, and a few detections that I test by attacking my own endpoint (safely) and checking that the alert actually fires.
 
-This is my third security project, after a phishing triage CLI and a Sigma detection-rule pack. Those taught me how detection *rules* work. This one is about the engine they run in.
+Still a work in progress. I'm committing as I go, so some sections below are empty for now.
 
-> **Status: work in progress.** I'm building this over a couple of days and committing as I go, so some sections below are still stubs.
+## Why
 
-## Why I built this
+Pretty much every SOC analyst posting asks for SIEM experience. I did a phishing triage CLI and a Sigma detection rule pack before this, so I knew what detection rules look like on paper, but I'd never had the actual engine running anywhere. This project is me fixing that. I went with Wazuh because it's free, open source, and real companies actually run it in production.
 
-Every SOC analyst job posting mentions SIEM experience, and you can't get that from a textbook. I wanted to be able to say in an interview: I stood up the SIEM myself, enrolled the agent myself, broke it, fixed it, and watched real alerts fire from attacks I ran. Wazuh made sense because it's free, open source, and actually used in production at companies that don't have Splunk budgets.
-
-## Architecture
-
-Logs flow from the endpoint to my browser like this:
+## How a log gets from the endpoint to my screen
 
 ```
-[Ubuntu endpoint]                        [Wazuh server - Docker, single node]
-  something happens                        ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-  (failed login, file change)              │   manager    │   │   indexer   │   │  dashboard  │
-        │                                  │ decodes logs │──▶│  stores     │──▶│  where I    │
-        ▼                                  │ + runs rules │   │  alerts     │   │ investigate │
-  written to /var/log/...                  └─────────────┘   └─────────────┘   └─────────────┘
-        │                                         ▲
-        ▼                                         │
-  [Wazuh agent] ── encrypted, TCP 1514 ───────────┘
-  tails the logs, ships new events
+something happens on the Ubuntu endpoint (failed ssh login, new user, etc)
+    |
+    v
+a line gets written to /var/log/auth.log like normal
+    |
+    v
+the wazuh agent on the endpoint picks up the new line
+and sends it to the manager (tcp 1514, encrypted)
+    |
+    v
+the manager (docker container) parses it into fields
+and runs it through its rules
+    |
+    v
+if a rule matches -> alert -> stored in the indexer (the database)
+    |
+    v
+I see it in the dashboard in my browser at https://localhost
 ```
 
-In plain English: the endpoint writes logs like it always does. The Wazuh agent (a small program on the endpoint) tails those logs and ships every new event to the manager. The manager parses each event into structured fields and runs it through its ruleset — including rules that correlate patterns over time, like a burst of failed logins. Anything that matches becomes an alert, gets stored in the indexer, and shows up in the dashboard where I can search and investigate it.
+The manager is where detection actually happens. It can also correlate over time, so one failed login is just an event, but 10 in two minutes from the same IP turns into a brute force alert. The indexer is basically the database and the dashboard is just the UI that queries it.
 
 ## Detections
 
-Each detection gets validated the same way: run a safe simulation against my endpoint, confirm the alert fires in Wazuh, document what I saw. Write-ups live in [detections/](detections/).
-
-| # | Technique | MITRE ATT&CK | Status |
-|---|-----------|--------------|--------|
-| 1 | *(coming — day 1)* | | ⬜ |
-| 2 | *(coming — day 2)* | | ⬜ |
-| 3 | *(coming — day 2)* | | ⬜ |
+The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: run a safe simulation against my endpoint, confirm the alert fires in Wazuh, write up what I saw. Write-ups will live in [detections/](detections/) once they exist.
 
 ## Case study
 
-One technique, walked through end to end: what I simulated, how it looked in the raw logs, how the rule caught it, and what a false positive for that same rule would look like. Coming in [docs/](docs/) once the detections are done.
+One technique walked through end to end: what I simulated, what the raw logs looked like, how the rule caught it, and what a false positive on that same rule would look like. Coming after the detections are done.
 
 ## What I learned
 
-Filling this in as I go — the honest version, including what broke and how I figured it out.
+Filling this in as I go. There's a running log of what broke and how I figured it out in [docs/lab-journal.md](docs/lab-journal.md).
 
 ## How to reproduce
 
-Coming once the stack is stable, so I don't document steps that turn out to be wrong.
+Coming at the end, once I'm sure the steps I'd write down are actually the right ones.
