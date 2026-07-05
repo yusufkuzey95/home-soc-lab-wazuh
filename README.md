@@ -6,7 +6,7 @@ Everything here works and is validated. There are 4 detections mapped to MITRE A
 
 ## Why
 
-Pretty much every SOC analyst posting asks for SIEM experience. My last two projects, a phishing triage CLI and a Sigma detection rule pack, were about writing and understanding detection rules. This one is the next step up: running those rules in a real SIEM and watching them fire against actual attacks. I went with Wazuh because it's free, open source, and real companies actually run it in production.
+Pretty much every SOC analyst posting asks for SIEM experience. I did a phishing triage CLI and a Sigma detection rule pack before this, so I knew what detection rules look like on paper. This one is about the engine itself: getting a real SIEM up and watching it catch attacks as they happen. I went with Wazuh because it's free, open source, and real companies actually run it in production.
 
 ## How a log gets from the endpoint to my screen
 
