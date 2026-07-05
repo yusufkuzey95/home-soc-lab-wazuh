@@ -23,9 +23,9 @@ Every attempt fails on purpose. I used sshpass because ssh won't take a password
 Each failed attempt makes sshd write a line to /var/log/auth.log. These are the actual lines from my run:
 
 ```
-Jul 04 23:27:55 DESKTOP-NTNCASD sshd[6014]: Failed password for invalid user hacker from 127.0.0.1 port 57816 ssh2
-Jul 04 23:28:11 DESKTOP-NTNCASD sshd[6038]: Invalid user hacker from 127.0.0.1 port 56646
-Jul 04 23:28:13 DESKTOP-NTNCASD sshd[6038]: Failed password for invalid user hacker from 127.0.0.1 port 56646 ssh2
+Jul 04 23:27:55 ubuntu-host sshd[6014]: Failed password for invalid user hacker from 127.0.0.1 port 57816 ssh2
+Jul 04 23:28:11 ubuntu-host sshd[6038]: Invalid user hacker from 127.0.0.1 port 56646
+Jul 04 23:28:13 ubuntu-host sshd[6038]: Failed password for invalid user hacker from 127.0.0.1 port 56646 ssh2
 ```
 
 On their own these are just text sitting in a file on the endpoint. Nobody is watching them there. The Wazuh agent tails that file and ships each new line to the manager over port 1514.
