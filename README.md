@@ -46,7 +46,9 @@ The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: ru
 
 ## Case study
 
-One technique walked through end to end: what I simulated, what the raw logs looked like, how the rule caught it, and what a false positive on that same rule would look like. Coming after the detections are done.
+One technique walked through end to end: what I simulated, what the raw logs looked like, how the rule caught it, how I'd triage it, and what a false positive looks like. I picked SSH brute force because it's the clearest example of the one thing a SIEM does that grep can't, correlate a pile of small events into one.
+
+Read it here: [docs/case-study-ssh-brute-force.md](docs/case-study-ssh-brute-force.md)
 
 ## What I learned
 
