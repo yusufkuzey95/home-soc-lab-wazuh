@@ -35,7 +35,11 @@ The manager is where detection actually happens. It can also correlate over time
 
 ## Detections
 
-The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: run a safe simulation against my endpoint, confirm the alert fires in Wazuh, write up what I saw. Write-ups will live in [detections/](detections/) once they exist.
+The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: run a safe simulation against my endpoint, confirm the alert fires in Wazuh, write up what I saw.
+
+| # | Technique | MITRE | Wazuh rule | Write-up |
+|---|-----------|-------|------------|----------|
+| 1 | SSH brute force | T1110 | 5712 (lvl 10) | [01-ssh-brute-force.md](detections/01-ssh-brute-force.md) |
 
 ## Case study
 
