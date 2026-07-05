@@ -42,6 +42,7 @@ The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: ru
 | 1 | SSH brute force | T1110 | 5712 (lvl 10) | [01-ssh-brute-force.md](detections/01-ssh-brute-force.md) |
 | 2 | New user account created | T1136.001 | 5902 (lvl 8) | [02-new-user-account.md](detections/02-new-user-account.md) |
 | 3 | Privilege escalation (usermod to sudo) | T1548.003 | **100002 (custom, lvl 10)** | [03-sudo-privilege-escalation.md](detections/03-sudo-privilege-escalation.md) |
+| 4 | File tampering (/etc/passwd, direct edit) | T1136 / T1078 | 550 (FIM, lvl 7) | [04-fim-passwd-tamper.md](detections/04-fim-passwd-tamper.md) |
 
 ## Case study
 
