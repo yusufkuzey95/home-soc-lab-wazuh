@@ -1,6 +1,6 @@
 # Home SOC Lab (Wazuh)
 
-My third security project. I built a small SOC setup at home so I can say I've actually used a SIEM instead of just reading about one. The setup is Wazuh running in Docker, one Ubuntu endpoint sending its logs in, and a few detections that I test by attacking my own endpoint (safely) and checking that the alert actually fires.
+My third security project. I built a small SOC setup at home. The setup is Wazuh running in Docker, one Ubuntu endpoint sending its logs in, and a few detections that I test by attacking my own endpoint (safely) and checking that the alert actually fires.
 
 Everything here works and is validated. There are 4 detections mapped to MITRE ATT&CK, one of them a custom rule I wrote to close a gap I found in Wazuh's default ruleset, plus a full case study on one of them.
 
@@ -51,16 +51,6 @@ These aren't random, they line up as a little kill chain: brute force your way i
 One technique walked through end to end: what I simulated, what the raw logs looked like, how the rule caught it, how I'd triage it, and what a false positive looks like. I picked SSH brute force because it's the clearest example of the one thing a SIEM does that grep can't, correlate a pile of small events into one.
 
 Read it here: [docs/case-study-ssh-brute-force.md](docs/case-study-ssh-brute-force.md)
-
-## What I learned
-
-The honest version, including the stuff that broke.
-
-- A SIEM isn't magic, it's three jobs: pull logs into one place, parse them into common fields, and run rules against the stream. Wazuh is those three containers (manager, indexer, dashboard) plus an agent on the endpoint doing the collecting.
-- "Up" is not "healthy". `docker ps` saying a container is running told me nothing, the indexer has its own health API (green/yellow/red) and that's the check that actually matters. When the dashboard looked broken, the thing that was actually broken was the indexer behind it. The component showing the error usually isn't the one that failed.
-- The difference between an event and an alert finally clicked when I watched it happen. Eight failed logins each fired a quiet level-5 event, and the moment the eighth landed, a level-10 brute force alert fired off the back of them. That counting-across-time thing is the whole reason a SIEM exists and grep doesn't cut it.
-- The best moment was finding a real gap. Wazuh's built-in rule for "user added to sudo group" only watches the gpasswd tool, so adding a user with usermod slipped right past it. I wrote a custom rule to catch it, then realized my own rule was just as dodgeable (use a third tool and it misses again). The real lesson: detect on the outcome that changed, not the tool that changed it. Detection 4 (file integrity monitoring) is that lesson made concrete.
-- Most of the alert queue is not attacks. The agent threw 282 alerts before I did anything, just from a config audit scoring how hardened the box was. A real analyst spends most of their time on stuff that turns out to be fine, which is exactly why false positives are the hard part, and why every detection write-up here has a section on what a false positive looks like.
 
 ## How to reproduce
 
