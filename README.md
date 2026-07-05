@@ -40,6 +40,7 @@ The plan is 3-4 detections mapped to MITRE ATT&CK. Same process for each one: ru
 | # | Technique | MITRE | Wazuh rule | Write-up |
 |---|-----------|-------|------------|----------|
 | 1 | SSH brute force | T1110 | 5712 (lvl 10) | [01-ssh-brute-force.md](detections/01-ssh-brute-force.md) |
+| 2 | New user account created | T1136.001 | 5902 (lvl 8) | [02-new-user-account.md](detections/02-new-user-account.md) |
 
 ## Case study
 
